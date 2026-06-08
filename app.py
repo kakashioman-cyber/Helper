@@ -38,7 +38,24 @@ class GeminiEmbeddings:
 # 4. Inisialisasi Database ChromaDB
 @st.cache_resource
 def init_services():
-    return Chroma(persist_directory="./chroma_db", embedding_function=GeminiEmbeddings())
+    persistent_directory = "./chroma_db"
+    embedding_function = GeminiEmbeddings()
+
+    if not os.path.exists(persistent_directory):
+        with st.spinner("Sedang mengunduh database sejarah secara aman..."):
+            # Mengambil URL rahasia dari Secrets Streamlit Cloud
+            db_url = st.secrets["DATABASE_URL"] 
+
+            # 💡 Menggunakan gdown untuk download anti-corrupt dari Google Drive
+            gdown.download(db_url, "chroma_db.zip", quiet=False)
+
+            # Proses ekstraksi otomatis
+            with zipfile.ZipFile("chroma_db.zip", 'r') as zip_ref:
+                zip_ref.extractall(".")
+
+            os.remove("chroma_db.zip") 
+
+    return Chroma(persist_directory=persistent_directory, embedding_function=embedding_function)
 
 db = init_services()
 
