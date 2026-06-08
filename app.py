@@ -78,8 +78,8 @@ if user_query := st.chat_input("Tanyakan tentang riset industri, rancang bangun,
     with st.chat_message("assistant"):
         with st.spinner("Sedang menganalisis seluruh dokumen dataset..."):
             try:
-                # A. Ambil dokumen relevan dari database (Mengambil 20 chunks terbaik agar pembacaan tabel lebih lengkap)
-                docs = db.similarity_search(user_query, k=20)
+                # A. Ambil dokumen relevan dari database (Mengambil 12 chunks terbaik agar pembacaan tabel lebih lengkap)
+                docs = db.similarity_search(user_query, k=12)
                 context = "\n\n".join([doc.page_content for doc in docs])
                 
                 # B. Prompt khusus RAG tentang Helper Data Multidokumen Teknis
