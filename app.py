@@ -65,6 +65,17 @@ db = init_services()
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Membuat sidebar tombol hapus chat
+with st.sidebar:
+    st.header("⚙️ Pengaturan Obrolan")
+    st.write("Gunakan tombol di bawah untuk membersihkan memori obrolan agar kuota API Gemini menjadi hemat.")
+    
+    # Logika jika tombol diklik
+    if st.button("🗑️ Hapus Riwayat Chat", use_container_width=True):
+        st.session_state.messages = []
+        st.rerun() # Muat ulang halaman web agar chat di layar langsung bersih
+
+# Tampilkan pesan chat yang tersimpan
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
